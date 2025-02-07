@@ -38,7 +38,13 @@ exports.createHotel = async (req, res) => {
     });
 
     const savedHotel = await newHotel.save();
-    return res.status(201).json({ hotel: savedHotel, status: 201 });
+    return res
+      .status(201)
+      .json({
+        hotel: savedHotel,
+        status: 200,
+        message: "Hotel created successfully",
+      });
   } catch (error) {
     return res
       .status(500)

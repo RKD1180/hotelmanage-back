@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 5000;
 const app = express();
 
 const corsOptions = {
-  origin: "*", // Allow all origins for now
+  origin: ["http://localhost:5173", "http://localhost:3000"],
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
 };
@@ -38,7 +38,10 @@ app.listen(PORT, () => {
 });
 
 // Listen for MongoDB connection events
-dbConnection.on("error", console.error.bind(console, "MongoDB connection error:"));
+dbConnection.on(
+  "error",
+  console.error.bind(console, "MongoDB connection error:")
+);
 dbConnection.once("open", () => {
   console.log("Connected to MongoDB");
 });
