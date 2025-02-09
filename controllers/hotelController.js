@@ -38,13 +38,11 @@ exports.createHotel = async (req, res) => {
     });
 
     const savedHotel = await newHotel.save();
-    return res
-      .status(201)
-      .json({
-        hotel: savedHotel,
-        status: 200,
-        message: "Hotel created successfully",
-      });
+    return res.status(201).json({
+      hotel: savedHotel,
+      status: 200,
+      message: "Hotel created successfully",
+    });
   } catch (error) {
     return res
       .status(500)
@@ -140,12 +138,11 @@ exports.deleteHotel = async (req, res) => {
   }
 };
 
-// Search hotels by name, address, or image
 exports.searchHotels = async (req, res) => {
   try {
     const { query } = req.query;
 
-    if (!query) {
+    if (!query || query.trim() === "") {
       return res.status(400).json({
         error: { message: "Query parameter is required", status: 400 },
       });
@@ -153,13 +150,12 @@ exports.searchHotels = async (req, res) => {
 
     const hotels = await Hotel.find({
       $or: [
-        { name: { $regex: query, $options: "i" } },
-        { address: { $regex: query, $options: "i" } },
-        { image: { $regex: query, $options: "i" } },
+        { name: new RegExp(query, "i") },
+        { address: new RegExp(query, "i") },
       ],
     });
 
-    if (hotels.length === 0) {
+    if (!hotels.length) {
       return res
         .status(404)
         .json({ error: { message: "No hotels found", status: 404 } });
